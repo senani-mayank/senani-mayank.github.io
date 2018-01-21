@@ -131,7 +131,7 @@ function fileInputOnChange( imageFile, type ) {
 		        playSound(text);
 		}
 
-                $("#mytext").text(text);
+               // $("#mytext").text(text);
 
             })
             .fail(function(err) {
@@ -167,7 +167,7 @@ function returnOcr( data ){
 		var lines = r.lines;
 		for( line in lines ){
 			var l = lines[line];
-			text = text + "\n Line " + (k++) + "\n" ;
+			text = text + "\n Line " + (k++) + ".\n" ;
 			var words = l.words;
 			for( word in words ){
 				text = text + words[word].text + " ";
@@ -179,7 +179,7 @@ function returnOcr( data ){
 
 function returnFaceText( persons ){
 	var len = persons.length;
-	var text = len + "  faces detected.\n";
+	var text = len + " face " + ( (len > 1) ? "s" : "" ) + "detected.\n";
 	var i = 1;
 	for( p in persons ){
 		text = text + "\nDescribing Person " + ( i++ ) + "\n";
@@ -191,7 +191,7 @@ function returnFaceText( persons ){
 		var hair = attrs.hair;
 		text = text + " " + heshe + " is " + attrs.gender + ".\n";
 		text = text + "with age around " + age + "years.\n";
-		text = text + " " + heshe + " " + wearGlasses  + " Wears Glasses\n";
+		text = text + " " + heshe + " " + wearGlasses  + " Wears Glasses.\n";
 		if( hair.bald >= 0.8 ){
 			text = text + " " + heshe + " is Bald.\n";
 		}
@@ -200,7 +200,7 @@ function returnFaceText( persons ){
 		}
 	}
 	console.log( "tttt", text );
-	$("#mytext").text(text);
+	//$("#mytext").text(text);
 	return text;
 }
 
@@ -227,10 +227,11 @@ artyom.addCommands([
         }
     },
     {
-        indexes: ['snap','ek picture','take picture', 'around'],
+        indexes: ['snap','map','ek picture','take picture', 'around', "what around", 'a picture', 'picture'],
         action: (i) => {
             artyom.say("camera opened, please take picture for analysis.");
 	    //document.getElementById('l1').click();
+	    $("#PhotoPicker").trigger('touch');
         }
     },
     {
@@ -263,3 +264,7 @@ artyom.initialize({
 }).catch((err) => {
     console.error("Artyom couldn't be initialized: ", err);
 });
+
+function lucky(){
+	artyom.say("Thank You.Have a Nice Day Ahead.");
+}
