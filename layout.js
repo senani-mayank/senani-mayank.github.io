@@ -227,21 +227,22 @@ artyom.addCommands([
         }
     },
     {
-        indexes: ['1','one'],
+        indexes: ['snap','ek picture','take picture', 'around'],
         action: (i) => {
-            artyom.say("one.");
+            artyom.say("camera opened, please take picture for analysis.");
+	    //document.getElementById('l1').click();
         }
     },
     {
-        indexes: ['2','two', 'tu'],
+        indexes: ['ocr','see', 'oseer', 'perform ocr', 'perform'],
         action: (i) => {
-            artyom.say("two.");
+            artyom.say("camera opened, Take Pictiure for ocr");
         }
     },
     {
-        indexes: ['3','three', 'free'],
+        indexes: ['describe faces','describe', 'faces'],
         action: (i) => {
-            artyom.say("three.");
+            artyom.say("camera opened, Take Pictiure for Faces Recognization");
         }
     },
 ]);
