@@ -1,264 +1,59 @@
-var fileType;
-var reader = new FileReader();
-var mybinaryfile = "dfd";
-var visionApiUrl = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0";
-var visionApiKey = "64d312538167425eb6a158f22fe56ad8";
-var emotionApiUrl = "https://westus.api.cognitive.microsoft.com/emotion/v1.0";
-var emotionApiKey = "6b2b0ca1fb5c446e87ebff6a7abc9782";
-var faceApiUrl = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0";
-var faceApiKey = "0b5e228f166643bcb58d0a8a8db855e0";
-
-function toDataURL(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-}
-
-$(document).on('ready', function() {
-
-    $('#PhotoPicker').on('change', function(e) {
-        e.preventDefault();
-        if (this.files.length === 0) return;
-        var imageFile = this.files[0];
-        populatebinaryfile(imageFile, 1 );
-    });
-    $('#ocr').on('change', function(e) {
-        e.preventDefault();
-        if (this.files.length === 0) return;
-        var imageFile = this.files[0];
-        populatebinaryfile(imageFile, 2);
-    });
-    $('#face').on('change', function(e) {
-        e.preventDefault();
-        if (this.files.length === 0) return;
-        var imageFile = this.files[0];
-        populatebinaryfile(imageFile, 3);
-    });
+<!doctype html>
+<html>
+<head>
+<title>Inclusive Hackthon 2018</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+<script src="artyom.window.js"></script>
+    <script src='layout.js'></script>
 
 
-});
-
-function populatebinaryfile(imageData , type) {
-
-    fileInputOnChange(imageData, type );
-
-}
+</head>
+<body class="container" >
+<p id="mytext"></p>
+	<div class="row text-center font-weight-bold" style="font-size: 50px">
 
 
 
 
-//onChange event handler for file input
-function fileInputOnChange( imageFile, type ) {
 
-    var reader = new FileReader();
-    var fileType;
-
-    //wire up the listener for the async 'loadend' event
-    reader.addEventListener('loadend', function() {
-
-        //get the result of the async readAsArrayBuffer call
-        var fileContentArrayBuffer = reader.result;
-	var query = "";
-	var endpoint = "";
-	var api = "";
-	var key = "";
-	/*if( type == 0 ){
-		query = "?visualFeatures=Description,Tags";
-		endpoint = "/analyze";
-		api = visionApiUrl;
-		key = visionApiKey;
-	}*/
-	if( type == 1 ){
-		api = visionApiUrl;
-		key = visionApiKey;
-		query = "?maxCandidates=2";
-		endpoint = "/describe";
-		
-        }
-	else if( type == 2 ){
-		query = "?language=en&detectOrientation=true";
-		endpoint = "/ocr";
-		api = visionApiUrl;
-		key = visionApiKey;
-        }
-	else if( type == 3 ){
-		query = "?returnFaceAttributes=age,gender,emotion,glasses,hair";
-		api = faceApiUrl;
-		key = faceApiKey;
-		endpoint = "/detect";
-		
-        }
-
-        //now that we've read the file, make the ajax call
-        $.ajax({
-                url: api + endpoint + query,
-                beforeSend: function(xhrObj) {
-                    // Request headers
-                    xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
-                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", key);
-                },
-                type: "POST",
-
-                //don't forget this!
-                processData: false,
-
-                //NOTE: the fileContentArrayBuffer is the single element 
-                //IN AN ARRAY passed to the constructor!
-                data: new Blob([fileContentArrayBuffer], {
-                    type: fileType
-                })
-            })
-            .done(function(data) {
-                console.log(data)
-		if( type == 1 ){
-		        var text = returnDescription(data);
-		        playSound(text);
-		}
-		else if( type == 2 ){
-		        var text = returnOcr(data);
-		        playSound(text);
-		}
-		else if( type == 3 ){
-		        var text = returnFaceText(data);
-		        playSound(text);
-		}
-
-                $("#mytext").text(text);
-
-            })
-            .fail(function(err) {
-                console.log(err)
-            });
-
-    });
-    if (imageFile) {
-        //save the mime type of the file
-        fileType = imageFile.type;
-
-        //read the file asynchronously
-        reader.readAsArrayBuffer(imageFile);
-    }
-}
+		<button class="col bg-info p-4 button" style="min-height:350px">
+		<label for="PhotoPicker" class="custom-file-upload">What's Around Me?</label>
+			<input style="display:none" type="file" id="PhotoPicker"
+			       accept="image/*" capture="camera"/>
+		</button>
+	 
 
 
 
-function returnDescription(data) {
-	//$("#mytext").text(data.description.captions[0].text);
-    return data.description.captions[0].text;
-}
-
-function returnOcr( data ){
-	var text = "";
-	var i = 1;
-	var regions = data.regions;
-	for( var region in regions ){
-		var r = regions[region];
-		console.log( "region:" + i, r );
-		text = text + "\n Region " + (i++) ;
-		var k = 1;
-		var lines = r.lines;
-		for( line in lines ){
-			var l = lines[line];
-			text = text + "\n Line " + (k++) + "\n" ;
-			var words = l.words;
-			for( word in words ){
-				text = text + words[word].text + " ";
-			}
-		}
-	}
-	return text;
-}
-
-function returnFaceText( persons ){
-	var len = persons.length;
-	var text = len + "  faces detected.\n";
-	var i = 1;
-	for( p in persons ){
-		text = text + "\nDescribing Person " + ( i++ ) + "\n";
-		var person = persons[p];
-		var attrs = person.faceAttributes;
-		var age = attrs.age;
-		var heshe = attrs.gender == "male" ? "He" : "SHE" ;
-		var wearGlasses = ( attrs.glasses == "NoGlasses" ) ? "Does NOT" : "" ;
-		var hair = attrs.hair;
-		text = text + " " + heshe + " is " + attrs.gender + ".\n";
-		text = text + "with age around " + age + "years.\n";
-		text = text + " " + heshe + " " + wearGlasses  + " Wears Glasses\n";
-		if( hair.bald >= 0.8 ){
-			text = text + " " + heshe + " is Bald.\n";
-		}
-		else{
-			text = text + " " + heshe + " has probably " + hair.hairColor[0].color + " Coloured Hairs.\n";
-		}
-	}
-	console.log( "tttt", text );
-	$("#mytext").text(text);
-	return text;
-}
-
-function playSound(text) {
-    responsiveVoice.speak(text);
-}
+		<button class="col bg-info p-4 button" style="min-height:350px">
+		<label for="ocr" class="custom-file-upload">Perform OCR</label>
+			<input style="display:none" type="file" id="ocr"
+			       accept="image/*" capture="camera"/>
+		</button>
+	  <div class="w-100"></div>
+	<button class="col bg-info p-4 button" style="min-height:350px">
+	<label for="face" class="custom-file-upload">Describe Faces</label>
+		<input style="display:none" type="file" id="face"
+		       accept="image/*" capture="camera"/>
+	</button>
+	  <button class="col bg-danger p-4" style="min-height:350px">Recognize Handwriting.</button>
 
 
-/*
-Endpoint: https://westus.api.cognitive.microsoft.com/emotion/v1.0
 
-Key 1: 6b2b0ca1fb5c446e87ebff6a7abc9782
 
-Key 2: af1566ef006e40cda3ad314182fa7851
-*/
 
-var artyom = new Artyom();
 
-artyom.addCommands([
-    {
-        indexes: ['Hello','Hi','is someone there'],
-        action: (i) => {
-            artyom.say("Hi user, I am listening.");
-        }
-    },
-    {
-        indexes: ['1','one'],
-        action: (i) => {
-            artyom.say("one.");
-        }
-    },
-    {
-        indexes: ['2','two', 'tu'],
-        action: (i) => {
-            artyom.say("two.");
-        }
-    },
-    {
-        indexes: ['3','three', 'free'],
-        action: (i) => {
-            artyom.say("three.");
-        }
-    },
-]);
 
-artyom.initialize({
-    lang: "en-IN", // GreatBritain english
-    continuous: true, // Listen forever
-    soundex: true,// Use the soundex algorithm to increase accuracy
-    debug: true, // Show messages in the console
-    executionKeyword: "and do it now",
-    listen: true // Start to listen commands !
 
-    // If providen, you can only trigger a command if you say its name
-    // e.g to trigger Good Morning, you need to say "Jarvis Good Morning"
-    //,name: "Jarvis" 
-}).then(() => {
-    console.log("Artyom has been succesfully initialized");
-}).catch((err) => {
-    console.error("Artyom couldn't be initialized: ", err);
-});
+
+
+	</div>
+<!--
+<div id="output">fdfd</div>
+<button onclick="recognition.start()">Start</button>
+<button onclick="recognition.stop()">Stop</button>
+-->
+     </body>
+</html>
