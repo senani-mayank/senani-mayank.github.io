@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<title>Inclusive Hackthon 2018</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+    <script src='layout.js'></script>
+
+
+</head>
+<body class="container" >
+<p id="mytext"></p>
+	<div class="row text-center font-weight-bold" style="font-size: 50px">
+
+
+
+
+
+		<button class="col bg-info p-4 button" style="min-height:350px">
+		<label for="PhotoPicker" class="custom-file-upload">What's Around Me?</label>
+			<input style="display:none" type="file" id="PhotoPicker"
+			       accept="image/*" capture="camera"/>
+		</button>
+	 
+
+
+
+		<button class="col bg-info p-4 button" style="min-height:350px">
+		<label for="ocr" class="custom-file-upload">Perform OCR</label>
+			<input style="display:none" type="file" id="ocr"
+			       accept="image/*" capture="camera"/>
+		</button>
+	  <div class="w-100"></div>
+	<button class="col bg-info p-4 button" style="min-height:350px">
+	<label for="face" class="custom-file-upload">Describe Faces</label>
+		<input style="display:none" type="file" id="face"
+		       accept="image/*" capture="camera"/>
+	</button>
+	  <button class="col bg-danger p-4" style="min-height:350px">Recognize Handwriting.</button>
+
+
+
+
+
+
+
+
+
+
+	</div>
+<!--
+<div id="output">fdfd</div>
+<button onclick="recognition.start()">Start</button>
+<button onclick="recognition.stop()">Stop</button>
+-->
+     </body>
+</html>
