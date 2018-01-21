@@ -174,6 +174,11 @@ function returnOcr( data ){
 			}
 		}
 	}
+	
+	if( regions.lenght == 0 ){
+		text = "No Characters, Recognized in Given Image.";
+	}	
+	
 	return text;
 }
 
