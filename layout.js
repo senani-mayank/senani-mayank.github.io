@@ -272,5 +272,5 @@ artyom.initialize({
 });
 
 function lucky(){
-	artyom.say("Thank You.Have a Nice Day Ahead.");
+	artyom.say("The 3rd Eye aims at Describing Surroundings, at the Abstract Level, to people with Accessibility Issues Using AI.");
 }
