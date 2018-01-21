@@ -217,3 +217,48 @@ Key 1: 6b2b0ca1fb5c446e87ebff6a7abc9782
 Key 2: af1566ef006e40cda3ad314182fa7851
 */
 
+var artyom = new Artyom();
+
+artyom.addCommands([
+    {
+        indexes: ['Hello','Hi','is someone there'],
+        action: (i) => {
+            artyom.say("Hi user, I am listening.");
+        }
+    },
+    {
+        indexes: ['1','one'],
+        action: (i) => {
+            artyom.say("one.");
+        }
+    },
+    {
+        indexes: ['2','two', 'tu'],
+        action: (i) => {
+            artyom.say("two.");
+        }
+    },
+    {
+        indexes: ['3','three', 'free'],
+        action: (i) => {
+            artyom.say("three.");
+        }
+    },
+]);
+
+artyom.initialize({
+    lang: "en-IN", // GreatBritain english
+    continuous: true, // Listen forever
+    soundex: true,// Use the soundex algorithm to increase accuracy
+    debug: true, // Show messages in the console
+    executionKeyword: "and do it now",
+    listen: true // Start to listen commands !
+
+    // If providen, you can only trigger a command if you say its name
+    // e.g to trigger Good Morning, you need to say "Jarvis Good Morning"
+    //,name: "Jarvis" 
+}).then(() => {
+    console.log("Artyom has been succesfully initialized");
+}).catch((err) => {
+    console.error("Artyom couldn't be initialized: ", err);
+});
